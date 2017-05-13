@@ -43,7 +43,7 @@ This will also take some time, depending on your internet connection speed.
 
 [Mesos master](http://node1:5050)
 
-[Marathon GUI](http://node1:8001) 
+[Marathon GUI](http://node1:8080) 
 
 On this point, you can start deploying applications on Marathon.
 
