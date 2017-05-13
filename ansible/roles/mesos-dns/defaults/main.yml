@@ -1,0 +1,26 @@
+---
+mesos_dns_version: 0.6.0
+mesos_dns_refreshSeconds: 60
+mesos_dns_ttl: 60
+mesos_dns_domain: mesos
+mesos_dns_port: 53
+mesos_dns_resolvers:
+  - 8.8.8.8
+mesos_timeout: 5
+mesos_httpon: true
+mesos_dnson: true
+mesos_httpport: 8123
+mesos_externalon: true
+mesos_listener: 0.0.0.0
+mesos_SOAMname: ns1.mesos
+mesos_SOARname: root.ns1.mesos
+mesos_SOARefresh: 60
+mesos_SOARetry:   600
+mesos_SOAExpire:  86400
+mesos_SOAMinttl: 60
+mesos_IPSources:
+  - netinfo
+  - mesos
+  - host
+
+mesos_dns_memory: 512

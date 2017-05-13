@@ -1,0 +1,48 @@
+---
+# #maybe I need to remove resolvconf in systems with different DNS configurations
+#- name: remove resolvconf
+#  apt:
+#    name: resolvconf
+#    state: absent
+
+- name: create install directory
+  file:
+    path: /opt/mesos-dns
+    state: directory
+
+- name: download the mesos-dns binary
+  get_url:
+    url: 'https://github.com/mesosphere/mesos-dns/releases/download/v{{ mesos_dns_version }}/mesos-dns-v{{ mesos_dns_version }}-linux-amd64'
+    dest: '/opt/mesos-dns/mesos-dns'
+    mode: 0755
+
+- name: upload the mesos-dns configuration
+  template:
+    src: conf.j2
+    dest: /opt/mesos-dns/config.json
+    mode: 0644
+  tags:
+    - mesos-dns-test
+
+- name: start the mesos-dns service
+  run_once: true
+  uri:
+    url: "http://{{ groups['mesos-masters'][0] }}:8080/v2/apps"
+    method: POST
+    status_code: 201,409
+    body:
+      cmd: sudo /opt/mesos-dns/mesos-dns -config=/opt/mesos-dns/config.json
+      cpus: 1.0
+      mem: "{{ mesos_dns_memory }}"
+      id: mesos-dns
+      instances: 1
+    body_format: json
+
+- name: add the new nameserver to resolvconf
+  lineinfile:
+    path: /etc/resolvconf/resolv.conf.d/head
+    regexp: nameserver
+    line: "nameserver 192.168.70.10"
+    state: present
+  notify: reload resolvconf
+  

@@ -19,3 +19,10 @@
   roles:
     - { role: marathon }
   tags: marathon-cluster
+
+- hosts: mesos-slaves
+  user: ubuntu
+  become: yes
+  roles:
+    - { role: mesos-dns, mesos_dns_mode: marathon }
+  tags: mesos-dns

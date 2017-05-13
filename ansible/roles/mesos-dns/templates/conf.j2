@@ -1,0 +1,22 @@
+{
+  "zk": "zk://{{ groups['zookeeper'] | join(':2181,') }}:2181/mesos",
+  "masters": [ {% for node in groups['mesos-masters'] %}"{{ node }}:5050"{% if not loop.last %},{% endif %}{% endfor %} ],
+  "refreshSeconds": {{ mesos_dns_refreshSeconds }},
+  "ttl": {{ mesos_dns_ttl }},
+  "domain": "{{ mesos_dns_domain }}",
+  "port": {{ mesos_dns_port }},
+  "resolvers": {{ mesos_dns_resolvers | tojson }},
+  "timeout": {{ mesos_timeout }},
+  "httpon": {{ mesos_httpon | to_json }},
+  "dnson": {{ mesos_dnson | to_json }},
+  "httpport": {{ mesos_httpport }},
+  "externalon": {{ mesos_externalon | to_json }},
+  "listener": "{{ mesos_listener }}",
+  "SOAMname": "{{ mesos_SOAMname }}",
+  "SOARname": "{{ mesos_SOARname }}",
+  "SOARefresh": {{ mesos_SOARefresh }},
+  "SOARetry":   {{ mesos_SOARetry }},
+  "SOAExpire":  {{ mesos_SOAExpire }},
+  "SOAMinttl": {{ mesos_SOAMinttl }},
+  "IPSources": {{ mesos_IPSources | tojson }}
+}
