@@ -1,0 +1,69 @@
+---
+- name: add keyserver for mesosphere repo
+  apt_key:
+     keyserver: keyserver.ubuntu.com
+     id: E56151BF
+
+- name: add the mesosphere repository
+  apt_repository:
+     filename: mesosphere
+     repo: deb http://repos.mesosphere.io/ubuntu xenial main
+     state: present
+
+- name: Install python pip
+  apt: 
+    pkg: "{{ item }}" 
+    state: installed
+    update_cache: "{{ global_update_package_cache }}"
+  with_items:
+    - python-pip
+
+# this is probably not needed in a repo installation
+- name: setup JAVA_HOME in /etc/environment
+  lineinfile: dest=/etc/environment line='JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' state=present
+
+# Vagrant specific setting in order to fix a buggy hosts entry
+- name: cleanup system hostname alias to localhost
+  lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1.*{{ inventory_hostname }}.*' state=absent
+
+- name: Setup limits
+  template: src=limits.conf.j2 dest=/etc/security/limits.d/zookeeper.conf
+
+- name: install ZooKeeper
+  apt: 
+    pkg: "{{ item }}" 
+    state: installed
+  environment:
+    http_proxy: "{{ proxy }}"
+    https_proxy: "{{ proxy }}"
+  with_items:
+    - zookeeper
+    - zookeeperd
+
+- name: Upload zoo.cfg
+  template:
+    src: zoo.cfg.j2
+    dest: '{{ zookeeper_conf_dir }}/zoo.cfg'
+  notify:
+    - rolling restart message
+  tags: zookeeper_zoo_cfg
+
+- name: Upload server myid
+  copy:
+    content: |
+      {{ ni | default(1) }}
+    dest:    '{{ zookeeper_conf_dir }}/myid'
+  notify:
+    - rolling restart message
+
+- name: Install zk_shell
+  pip: name=zk-shell
+  environment:
+    http_proxy: "{{ proxy }}"
+    https_proxy: "{{ proxy }}"
+
+- name: Confirm zookeeper service is up and running
+  service:
+    name: zookeeper
+    state: started
+    enabled: yes

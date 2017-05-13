@@ -1,0 +1,18 @@
+
+## Globals
+# update ubuntu package cache. Default yes, useful for offline tests
+global_update_package_cache: no
+
+# Default proxy settings (none)
+proxyServer: ''
+proxyPort: 3128
+proxy: ''
+noproxy: 'localhost,127.0.0.1,localaddress,.localdomain.com'
+
+# mesos variables
+mesos_quorum: 1
+
+# mesos-dns variables:
+#overriding mesos_dns with the default VirtualBox DNS resolver.
+mesos_dns_resolvers:
+  - 10.0.2.3

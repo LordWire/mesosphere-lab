@@ -1,0 +1,18 @@
+[zookeeper]
+node1 ni=1
+node2 ni=2
+
+[mesos-masters]
+node1
+
+[mesos-slaves]
+node1
+node2
+
+[marathon:children]
+mesos-masters
+
+[mesos:children]
+mesos-masters
+mesos-slaves
+

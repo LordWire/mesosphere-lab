@@ -1,0 +1,8 @@
+---
+zookeeper_user: zookeeper
+zookeeper_group: zookeeper
+zookeeper_conf_dir: /etc/zookeeper/conf
+
+zookeeper_myid: 1
+zookeeper_nofile: 1048576
+zookeeper_nproc: 32000

@@ -1,0 +1,15 @@
+---
+- name: restart mesos slaves
+  service:
+     name: mesos-slave
+     state: restarted
+     enabled: yes
+  when: inventory_hostname in groups['mesos-slaves']
+
+
+- name: restart mesos masters
+  service:
+     name: mesos-master
+     state: restarted
+     enabled: yes
+  when: inventory_hostname in groups['mesos-masters']

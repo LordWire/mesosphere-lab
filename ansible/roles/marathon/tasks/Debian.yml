@@ -1,0 +1,26 @@
+---
+- name: update apt cache and install marathon
+  apt:
+     name: marathon
+     state: present
+     update_cache: "{{ global_update_package_cache }}"
+
+- name: Ensures marathon config dir exists
+  file: path=/etc/marathon/conf/ state=directory
+
+- name: create configuration direcctory and basic conf file
+  template:
+     src: conf.j2
+     dest: /etc/marathon/conf/hostname
+
+- name: add zookeeper config
+  template:
+     src: master.j2
+     dest: /etc/marathon/conf/master
+  notify: restart marathon
+
+- name: add marathon zookeeper config
+  template:
+     src: zk.j2
+     dest: /etc/marathon/conf/zk
+  notify: restart marathon

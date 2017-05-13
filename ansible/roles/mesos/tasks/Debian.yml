@@ -1,0 +1,87 @@
+---
+- name: add keyserver for mesosphere repo
+  apt_key:
+     keyserver: keyserver.ubuntu.com
+     id: E56151BF
+
+- name: add the mesosphere repository
+  apt_repository:
+     filename: mesosphere
+     repo: deb http://repos.mesosphere.io/ubuntu xenial main
+     state: present
+
+- name: update apt cache and install mesos
+  apt:
+     name: mesos
+     state: present
+     update_cache: "{{ global_update_package_cache }}"
+
+- name: add zookeeper connections for the cluster
+  template:
+     src: zk.j2
+     dest: /etc/mesos/zk
+  notify: restart mesos masters
+
+- name: update quorum
+  template:
+     src: quorum.j2
+     dest: /etc/mesos-master/quorum
+  when: inventory_hostname in groups['mesos-masters']
+  notify: restart mesos masters
+
+- name: setup node IP for master nodes
+  template:
+     src: ip.j2
+     dest: /etc/mesos-master/ip
+  when: inventory_hostname in groups['mesos-masters']
+  notify: restart mesos masters
+
+- name: setup node hostname for master nodes
+  template:
+     src: hostname.j2
+     dest: /etc/mesos-master/hostname
+  when: inventory_hostname in groups['mesos-masters']
+  notify: restart mesos masters
+
+- name: setup node IP for slave nodes
+  template:
+     src: ip.j2
+     dest: /etc/mesos-slave/ip
+  when: inventory_hostname in groups['mesos-slaves']
+  notify: restart mesos slaves
+
+- name: setup node hostname for slave nodes
+  template:
+     src: hostname.j2
+     dest: /etc/mesos-slave/hostname
+  when: inventory_hostname in groups['mesos-slaves']
+  notify: restart mesos slaves
+
+
+- name: disable mesos-master service in nonmaster nodes
+  service:
+     name: mesos-master
+     state: stopped
+     enabled: no
+  when: inventory_hostname not in groups['mesos-masters']
+
+- name: disable mesos-slave service in nonslave nodes
+  service:
+     name: mesos-slave
+     state: stopped
+     enabled: no
+  when: inventory_hostname not in groups['mesos-slaves']
+
+- name: start potentially inactive mesos slaves
+  service:
+     name: mesos-slave
+     state: started
+  when: inventory_hostname in groups['mesos-slaves']
+
+
+- name: start potentially inactive mesos masters
+  service:
+     name: mesos-master
+     state: started
+     enabled: yes
+  when: inventory_hostname in groups['mesos-masters']

@@ -1,0 +1,5 @@
+{{ zookeeper_user }} soft   nofile  {{ zookeeper_nofile }}
+{{ zookeeper_user }} hard   nofile  {{ zookeeper_nofile }}
+
+{{ zookeeper_user }} soft   nproc {{ zookeeper_nproc }}
+{{ zookeeper_user }} hard   nproc  {{ zookeeper_nproc }}

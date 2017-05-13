@@ -1,0 +1,21 @@
+- hosts: zookeeper
+  user: ubuntu
+  become: yes
+  roles:
+#    - { role: supervisor, tags: supervisor }
+    - { role: zookeeper, tags: zookeeper }
+  tags: zookeeper-cluster
+
+- hosts: mesos
+  user: ubuntu
+  become: yes
+  roles:
+    - { role: mesos }
+  tags: mesos-cluster
+
+- hosts: marathon
+  user: ubuntu
+  become: yes
+  roles:
+    - { role: marathon }
+  tags: marathon-cluster

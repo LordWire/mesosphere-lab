@@ -1,0 +1,2 @@
+- name: rolling restart message
+  debug: msg="WARNING! ZooKeeper configuration changed. Please perform a rolling restart"
