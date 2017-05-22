@@ -18,8 +18,8 @@ The environment was tested with the following software versions, on MacOS 10.12.
 
 1). Install prerequisites
 ```
-sudo dnf install ruby-devel
-# or ruby-dev for apt-based systems
+sudo dnf install VirtualBox vagrant ansible ruby-devel
+# ruby-devel is ruby-dev for apt-based systems
 ```
 
 2). Install the required vagrant plugins
