@@ -16,15 +16,20 @@ The environment was tested with the following software versions, on MacOS 10.12.
 
 ### Basic Installation instructions
 
+1). Install prerequisites
+```
+sudo dnf install VirtualBox vagrant ansible ruby-devel
+# ruby-devel is ruby-dev for apt-based systems
+```
 
-1). Install the required vagrant plugins
+2). Install the required vagrant plugins
 ```
 vagrant plugin install vagrant-hostmanager
 vagrant plugin install vagrant-vbguest
 ```
 
 
-2). Clone the repository and start the VMs
+3). Clone the repository and start the VMs
 ```
 git clone <the repository>
 cd mesosphere-lab
@@ -32,14 +37,14 @@ vagrant up --provider=virtualbox
 ```
 Go grab a coffee, because this step will take some time.
 
-3). Install mesosphere 
+4). Install mesosphere 
 ```
 cd ansible
 ansible-playbook provision.yml
 ```
 This will also take some time, depending on your internet connection speed. 
 
-4). After the installation finishes, the following will be available:
+5). After the installation finishes, the following will be available:
 
 [Mesos master](http://node1:5050)
 
