@@ -11,7 +11,7 @@ The environment was tested with the following software versions, on MacOS 10.12.
 
 - ansible (>=2.3.0)
 - Vagrant (>=1.8.5) 
-- VirtualBox (>=5.1)
+- VirtualBox (>=5.1.22)
 
 
 ### Basic Installation instructions
