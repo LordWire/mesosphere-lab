@@ -7,7 +7,9 @@ cluster = {
   "node1" => { :ip => "192.168.70.10", :cpus => 2, :mem => 2048, :cpucap => 30 },
   "node2" => { :ip => "192.168.70.11", :cpus => 2, :mem => 2048, :cpucap => 30 }
 }
- 
+
+require './vbguest-installer-fixes_issue_8502.rb'
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # vagrant-hostmanager settings
   config.hostmanager.enabled = true
@@ -17,8 +19,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.include_offline = false
 
   # vagrant-vbguest settings
+  config.vbguest.iso_path = "http://download.virtualbox.org/virtualbox/%{version}/VBoxGuestAdditions_%{version}.iso"
   config.vbguest.auto_update = true
-  config.vbguest.no_remote = true
+  config.vbguest.no_remote = false
+  config.vbguest.installer = Installer8502
 
   cluster.each_with_index do |(hostname, info), index|
 
