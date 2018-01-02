@@ -8,7 +8,7 @@
 - name: Ensures marathon config dir exists
   file: path=/etc/marathon/conf/ state=directory
 
-- name: create configuration direcctory and basic conf file
+- name: create configuration directory and basic conf file
   template:
      src: conf.j2
      dest: /etc/marathon/conf/hostname
